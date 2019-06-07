@@ -1,9 +1,10 @@
 ---
 title: "Apache Cassandra backup and restore"
 linkTitle: "Backup and restore"
+weight: 5
 date: 2019-06-05
 description: >
-  Back up and restore Cassandra.
+  Learn how to back up and restore Cassandra.
 ---
 
 In an Apache Cassandra database cluster, data is replicated between
@@ -41,12 +42,12 @@ You must read all of the following before you perform any of the instructions in
     backup polices and environment.
   - These instructions use the Cassandra snapshot functionality. A
     *snapshot* is a set of hard links for the current data files in a
-    keyspace.  
+    keyspace.
     While the snapshot does not take up noticeable diskspace, it will cause stale data files not to be cleaned up. This is because a snapshot directory is created under each table directory and will contain hard links to all table data files. When Cassandra cleans up the stale table data files, the snapshot files will remain. Therefore, it is critical to remove them promptly. The example backup script takes care of this by deleting the snapshot files at the end of the backup.
   - For safety reasons, the backup location should *not* be on the same
     disk as the Cassandra data directory, and it also must have enough
     free space to contain the keyspace.
-{{% /alert %}}    
+{{% /alert %}}
 
 ## Which data keyspaces to back up?
 
@@ -86,31 +87,39 @@ as shown in the following example:
 
 ## <span id="Back"></span>Back up a keyspace
 
-To back up a keyspace, you will use the `nodetool snapshot` command to
-create hard links, run a custom script to back up these links, and then
-archive that
-backup.
+To back up a keyspace, you will use the `nodetool snapshot` command to create hard links, run a custom script to back up these links, and then archive that backup.
 
 {{% alert title="Note" %}}
 You must repeat these steps for each keyspace to back up.
 {{% /alert %}}
 
 1.  Create a snapshot by running the following command on the seed node:
-```
-nodetool CONNECTION_PARMS snapshot -t SNAPSHOT_NAME-TIMESTAMP API_GW_KEYSPACE_NAME
-```
-
-1.  For example: 
-
-![](/Images/CassandraAdminGuide/nodetool_snapshot.png)
-
-2.  Run the following script to copy the snapshot files to another
-    location: 
-
+    ```
+    nodetool CONNECTION_PARMS snapshot -t SNAPSHOT_NAME-TIMESTAMP API_GW_KEYSPACE_NAME
+    ```
+    For example: 
+    ![](/Images/CassandraAdminGuide/nodetool_snapshot.png)
+2.  Run the Cassandra snapshot backup script to copy the snapshot files to another location: 
 {{% alert title="Note" %}}
 This script also clears the snapshot files from the Cassandra `data` directory.
 {{% /alert %}}
+    When this script finishes, it creates the following backup directory structure:
+    ```
+    <BACKUP_ROOT_DIR>
+    ├── <SNAPSHOT_NAME>
+    │ ├── <TABLE_NAME>
+    │ │  ├── <SNAPSHOT_FILES>
+    │ ├── <TABLE_NAME>
+    │ │  ├── <SNAPSHOT FILES>
+    │ │...
+    ```
+3. Archive the `SNAPSHOT_NAME` directory using your company's archive method so you can restore it later if needed.
 
+{{% alert title="Note" %}}
+It is best to take a snapshot backup on a daily basis.
+{{% /alert %}}
+
+### Sample Cassandra snapshot backup script
 ```bash
 #!/bin/bash
 ################################################################################
@@ -158,40 +167,19 @@ do
 done
 ```
 
-When this script finishes, it creates the following backup directory
-structure:
-```
-<BACKUP_ROOT_DIR>
-├── <SNAPSHOT_NAME>
-│ ├── <TABLE_NAME>
-│ │  ├── <SNAPSHOT_FILES>
-│ ├── <TABLE_NAME>
-│ │  ├── <SNAPSHOT FILES>
-│ │...
-```
-
-1.  Archive the `SNAPSHOT_NAME` directory using your company's archive
-    method so you can restore it later if
-needed.
-
-{{% alert title="Note" %}}
-It is best to take a snapshot backup on a daily basis.
-{{% /alert %}}
 
 ## Restore a keyspace
 
-This section explains how to restore API Management and KPS keyspaces
-and provides an example script to restore the
-files.
+This section explains how to restore API Management and KPS keyspaces and provides an example script to restore the files.
 
 ### Before you begin
 
-|  |            |                                                                                                                                      |
-|  | ---------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-|  | **Note  ** | If you are restoring a keyspace to the same cluster that the backup was taken from, skip to [Steps to restore a keyspace](#Restore). |
+{{% alert title="Note" %}}
+If you are restoring a keyspace to the same cluster that the backup was taken from, skip to [Steps to restore a keyspace](#Restore).
+{{% /alert %}}
 
-Before you restore a keyspace in a new Cassandra cluster, you must
-ensure the following:
+
+Before you restore a keyspace in a new Cassandra cluster, you must ensure that the following:
 
   - The Cassandra cluster must be created to the API Gateway HA
     specifications. For more details, see [Configure a highly available
@@ -207,79 +195,74 @@ ensure the following:
 1.  Shut down all API Gateway instances and any other clients in the
     Cassandra cluster.
 2.  Drain and shut down each Cassandra node in the cluster, one node at
-    a
-time.
+    a time.
+{{% alert title="Caution" color="warning" %}}
+You must execute the following (and wait for it to complete) on each Cassandra node before shutting it down, otherwise data loss may occur:
+```
+nodetool CONNECTION_PARMS drain
+```
+{{% /alert %}}
+1.  On the Cassandra seed node, delete all files in the `commitlog` and `saved_caches` directory.
+    For example:
+    ```
+    rm -r /opt/cassandra/data/commitlog/* /opt/cassandra/data/saved_caches/*
+    ```
+{{% alert title="Note" %}}
+Do not delete any folders in the keyspace folder on the node being restored. The restore script requires the table directories to be present in order to function correctly.
+{{% /alert %}}
+1.  On the Cassandra seed node, run the Cassandra restore snapshot script to restore the snapshot files taken by the backup process and script (described in [Back up a keyspace](#Back)).
+1.  On the other nodes in the cluster, perform the following:
+      - Delete all files in the `commitlog` and `saved_caches` directory.
+      - Delete all files in the `KEYSPACE` being restored under the `CASSANDRA_DATA_DIRECTORY`. For example:
+        ```
+        rm -rf /opt/cassandra/data/data/x9fa003e2_d975_4a4a_a27e_280ab7fd8a5_group_2/*
+        ```
+6.  If you have other keyspaces to restore, return to step 4 and repeat. Otherwise, continue to the next steps.
+7.  One at a time, start the Cassandra seed node, and then the other nodes, and wait for each to be in Up/Normal (`UN`) state in `nodetool status` before you proceed to the next node.
+8.  Perform a full repair of the cluster as follows on each node one at a time:
+```
+nodetool repair -pr --full
+```
+6.  Start the API Gateway instances.
 
-|  |            |                                                                                                                                             |
-|  | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-|  | **Note  ** | You must execute the following (and wait for it to complete) on each Cassandra node before shutting it down, otherwise data loss may occur: |
-
-<table>
-<tbody>
-<tr class="odd">
-<td><pre><code>nodetool CONNECTION_PARMS drain</code></pre></td>
-</tr>
-</tbody>
-</table>
-
-1.  On the Cassandra seed node, delete all files in the `commitlog` and
-    `saved_caches` directory. For example:
-
-<table>
-<tbody>
-<tr class="odd">
-<td><pre><code>rm -r /opt/cassandra/data/commitlog/* /opt/cassandra/data/saved_caches/*</code></pre></td>
-</tr>
-</tbody>
-</table>
-
-|  |            |                                                                                                                                                                              |
-|  | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  | **Note  ** | Do not delete any folders in the keyspace folder on the node being restored. The restore script requires the table directories to be present in order to function correctly. |
-
-1.  On the Cassandra seed node, run the following script to restore the
-    snapshot files taken by the backup process and script (described in
-    [Back up a keyspace](#Back)):
-
-<table>
-<tbody>
-<tr class="odd">
-<td><pre data-space="preserve"><code>#!/bin/bash
+### Sample Cassandra restore snapshot script
+```bash
+#!/bin/bash
 ################################################################################
 # Sample Cassandra restore snapshot script                                     #
 # NOTE: This MUST be adapted for and validated in your environment before use! #
-################################################################################</code></pre>
-<pre data-space="preserve"><code># Replace the xxx values below to match your environment
-CASSANDRA_DATA_DIR=&quot;xxx&quot;
-KEYSPACE_NAME=&quot;xxx&quot;
-SNAPSHOT_NAME=&quot;xxx&quot;
-BACKUP_ROOT_DIR=&quot;xxx&quot;</code></pre>
-<pre data-space="preserve"><code># Example:
-#  CASSANDRA_DATA_DIR=&quot;/opt/cassandra/data/data&quot;
-#  KEYSPACE_NAME=&quot;x9fa003e2_d975_4a4a_a27e_280ab7fd8a5_group_2&quot;
-#  SNAPSHOT_NAME=&quot;Group2-20181127_2144_28&quot;
-#  BACKUP_ROOT_DIR=&quot;/backup/cassandra-snapshots&quot;</code></pre>
-<pre data-space="preserve"><code>##### Do NOT change anything below this line #####
-backupdir=&quot;${BACKUP_ROOT_DIR}/${SNAPSHOT_NAME}&quot;
-keyspace_path=&quot;${CASSANDRA_DATA_DIR}/${KEYSPACE_NAME}&quot;
-echo -e &quot;\n\tRestoring tables from directory, &#39;${backupdir}&#39;, to directory, &#39;${keyspace_path}&#39;&quot;
-echo -e &quot;\tRestore snapshot, &#39;${SNAPSHOT_NAME}&#39;, to keyspace, &#39;${KEYSPACE_NAME}&#39;&quot;
-read -n 1 -p &quot;Continue (y/n)?&quot; answer
-echo -e &quot;\n&quot;
-if [ &quot;$answer&quot; != &quot;y&quot; ] &amp;&amp; [ &quot;$answer&quot; != &quot;Y&quot; ]; then
+################################################################################
+# Replace the xxx values below to match your environment
+CASSANDRA_DATA_DIR="xxx"
+KEYSPACE_NAME="xxx"
+SNAPSHOT_NAME="xxx"
+BACKUP_ROOT_DIR="xxx"
+# Example:
+#  CASSANDRA_DATA_DIR="/opt/cassandra/data/data"
+#  KEYSPACE_NAME="x9fa003e2_d975_4a4a_a27e_280ab7fd8a5_group_2"
+#  SNAPSHOT_NAME="Group2-20181127_2144_28"
+#  BACKUP_ROOT_DIR="/backup/cassandra-snapshots"
+##### Do NOT change anything below this line #####
+backupdir="${BACKUP_ROOT_DIR}/${SNAPSHOT_NAME}"
+keyspace_path="${CASSANDRA_DATA_DIR}/${KEYSPACE_NAME}"
+echo -e "\n\tRestoring tables from directory, '${backupdir}', to directory, '${keyspace_path}'"
+echo -e "\tRestore snapshot, '${SNAPSHOT_NAME}', to keyspace, '${KEYSPACE_NAME}'"
+read -n 1 -p "Continue (y/n)?" answer
+echo -e "\n"
+if [ "$answer" != "y" ] && [ "$answer" != "Y" ]; then
   exit 1
-fi</code></pre>
-<pre data-space="preserve"><code>set -e
-trap &#39;[ &quot;$?&quot; -eq 0 ] || echo \*\*\* FATAL ERROR \*\*\*&#39; EXIT $?</code></pre>
-<pre data-space="preserve"><code>if ! [ -d &quot;${backupdir}&quot; ]; then echo -e &quot;\nERROR: Backup not found at &#39;${backupdir}&#39;&quot;;exit 1; fi
-if ! [ -d &quot;${keyspace_path}&quot; ]; then echo -e &quot;\nERROR: Keyspace path &#39;${keyspace_path}&#39; is not valid&quot;;exit 1; fi</code></pre>
-<pre data-space="preserve"><code>keyspace_tables=$(mktemp)
-find &quot;${keyspace_path}/&quot; -maxdepth 1 -mindepth 1 -type d -fprintf ${keyspace_tables} &quot;%f\n&quot;
-sort -o ${keyspace_tables} ${keyspace_tables}</code></pre>
-<pre data-space="preserve"><code>backup_tablenames=$(mktemp)
-find &quot;${backupdir}/&quot; -maxdepth 1 -mindepth 1 -type d -fprintf ${backup_tablenames} &quot;%f\n&quot;
-sort -o ${backup_tablenames} ${backup_tablenames}</code></pre>
-<pre data-space="preserve"><code>keyspace_tablenames=$(mktemp)
+fi
+set -e
+trap '[ "$?" -eq 0 ] || echo \*\*\* FATAL ERROR \*\*\*' EXIT $?
+if ! [ -d "${backupdir}" ]; then echo -e "\nERROR: Backup not found at '${backupdir}'";exit 1; fi
+if ! [ -d "${keyspace_path}" ]; then echo -e "\nERROR: Keyspace path '${keyspace_path}' is not valid";exit 1; fi
+keyspace_tables=$(mktemp)
+find "${keyspace_path}/" -maxdepth 1 -mindepth 1 -type d -fprintf ${keyspace_tables} "%f\n"
+sort -o ${keyspace_tables} ${keyspace_tables}
+backup_tablenames=$(mktemp)
+find "${backupdir}/" -maxdepth 1 -mindepth 1 -type d -fprintf ${backup_tablenames} "%f\n"
+sort -o ${backup_tablenames} ${backup_tablenames}
+keyspace_tablenames=$(mktemp)
 table_names=()
 table_uuids=()
 while IFS= read -r table
@@ -288,62 +271,28 @@ do
   uuid=${str##*-}
   len=$((${#str} - ${#uuid} - 1))
   name=${str:0:${len}}
-  echo &quot;${name}&quot; &gt;&gt; ${keyspace_tablenames}
+  echo "${name}" >> ${keyspace_tablenames}
   table_names+=(${name})
   table_uuids+=(${uuid})
-done &lt; ${keyspace_tables}</code></pre>
-<pre data-space="preserve"><code>set +e
+done < ${keyspace_tables}
+set +e
 diff -a -q ${keyspace_tablenames} ${backup_tablenames}
 if [ $? -ne 0 ]; then
-  echo -e &quot;\nERROR: The tables on the keyspace at, &#39;${keyspace_path}&#39;, are not the same as the ones from the backup at,
-&#39;${backupdir}&#39;&quot;
+  echo -e "\nERROR: The tables on the keyspace at, '${keyspace_path}', are not the same as the ones from the backup at,
+'${backupdir}'"
   exit 1
-fi</code></pre>
-<pre data-space="preserve"><code>for ((i=0; i&lt;${#table_names[*]}; i++));
+fi
+for ((i=0; i<${#table_names[*]}; i++));
 do
-  echo &quot;Restoring table, &#39;${table_names[i]}&#39;&quot;
-  table_dir=&quot;${keyspace_path}/${table_names[i]}-${table_uuids[i]}&quot;
-  rm -r &quot;${table_dir}&quot;
-  mkdir &quot;${table_dir}&quot;
-  src=&quot;${backupdir}/${table_names[i]}&quot;
-  cp -r -a &quot;${src}&quot;/* &quot;${table_dir}/&quot;
-done</code></pre></td>
-</tr>
-</tbody>
-</table>
+  echo "Restoring table, '${table_names[i]}'"
+  table_dir="${keyspace_path}/${table_names[i]}-${table_uuids[i]}"
+  rm -r "${table_dir}"
+  mkdir "${table_dir}"
+  src="${backupdir}/${table_names[i]}"
+  cp -r -a "${src}"/* "${table_dir}/"
+done
+```
 
-1.  On the other nodes in the cluster, perform the following:
-
-2.    - Delete all files in the `commitlog` and `saved_caches`
-        directory.
-      - Delete all files in the `KEYSPACE` being restored under the
-        `CASSANDRA_DATA_DIRECTORY`. For example:
-
-<table>
-<tbody>
-<tr class="odd">
-<td><pre><code>rm -rf /opt/cassandra/data/data/x9fa003e2_d975_4a4a_a27e_280ab7fd8a5_group_2/*</code></pre></td>
-</tr>
-</tbody>
-</table>
-
-6.  If you have other keyspaces to restore, return to step 4 and repeat.
-    Otherwise, continue to the next steps.
-7.  One at a time, start the Cassandra seed node, and then the other
-    nodes, and wait for each to be in Up/Normal (`UN`) state in
-    `nodetool status` before you proceed to the next node.
-8.  Perform a full repair of the cluster as follows on each node one at
-    a time:  
-
-<table>
-<tbody>
-<tr class="odd">
-<td><pre><code>nodetool repair -pr --full</code></pre></td>
-</tr>
-</tbody>
-</table>
-
-6.  Start the API Gateway instances.
 
 ## Which configuration to back up?
 
@@ -357,16 +306,10 @@ You must back up the `CASSANDRA_HOME/conf` directory on all nodes.
 
 ### API Gateway group configuration
 
-You must back up the API Gateway group configuration in the following
-directory:
-
-<table>
-<tbody>
-<tr class="odd">
-<td><pre data-space="preserve"><code>API_GW_INSTALL_DIR/apigateway/groups/&lt;group-name&gt;/conf</code></pre></td>
-</tr>
-</tbody>
-</table>
+You must back up the API Gateway group configuration in the following directory:
+```
+API_GW_INSTALL_DIR/apigateway/groups/<group-name>/conf
+```
 
 This directory contains the API Gateway, API Manager, and KPS
 configuration data.

@@ -1,6 +1,7 @@
 ---
 title: "Manage Apache Cassandra"
 linkTitle: "Manage Apache Cassandra"
+weight: 4
 date: 2019-06-05
 description: >
   Start or stop Cassandra manually or as a service.
@@ -88,7 +89,7 @@ as follows:
 $ sudo service cassandra stop
 ```
 
-## <span id="Connect"></span>Connect to API Gateway for the first time
+## Connect to API Gateway for the first time
 
 Connecting to API Gateway depends on your operating system and
 installation setup type (Standard, Complete, or Custom).

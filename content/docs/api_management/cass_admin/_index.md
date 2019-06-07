@@ -11,11 +11,13 @@ Manager or API Gateway client registry. In addition, Cassandra is
 optional to store data for *Custom KPS table definitions and data* and
 *OAuth token stores* API Gateway components.
 
-## For existing users
+## Deployment and high availability
 
 [Cassandra deployment architectures](cassandra_architecture)
 
 [Configure a highly available Cassandra cluster](cassandra_config)
+
+## Operations and best practices
 
 [Apache Cassandra best practices](cassandra_bestpractices)
 
@@ -25,4 +27,6 @@ optional to store data for *Custom KPS table definitions and data* and
 
 [Perform essential Apache Cassandra operations](cassandra_ops)
 
-Document version: 5 June 2019
+## Reference
+
+[setup-cassandra script reference](cassandra_setup_script)
