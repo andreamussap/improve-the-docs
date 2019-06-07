@@ -1,10 +1,17 @@
-# Apache Cassandra best practices
+---
+title: "Apache Cassandra best practices"
+linkTitle: "Best practices"
+weight: 3
+date: 2019-06-05
+description: >
+  Follow the best practices in this section to achieve a stable Apache
+  Cassandra environment, and to prevent data integrity and performance
+  issues.
+---
 
 ## Before you start
 
-Follow the best practices in this section to achieve a stable Apache
-Cassandra environment, and to prevent data integrity and performance
-issues. Complete all of these tasks before you start Apache Cassandra.
+Complete all of these tasks before you start Apache Cassandra.
 
 ### Clock synchronization and health check
 
@@ -40,25 +47,21 @@ when issues are found.
 
 These are examples of warnings for a misconfigured Cassandra host:
 
-<table>
-<tbody>
-<tr class="odd">
-<td><pre data-space="preserve"><code>WARN Unable to lock JVM memory (ENOMEM). This can result in part of the JVM being swapped out, 
+```
+WARN Unable to lock JVM memory (ENOMEM). This can result in part of the JVM being swapped out,
      especially with mmapped I/O enabled. Increase RLIMIT_MEMLOCK or run Cassandra as root
 WARN jemalloc shared library could not be preloaded to speed up memory allocations
-WARN Cassandra server running in degraded mode. Is swap disabled? : true, 
-     Address space adequate? : true, nofile limit adequate? : false, nproc limit adequate? : false</code></pre></td>
-</tr>
-</tbody>
-</table>
+WARN Cassandra server running in degraded mode. Is swap disabled? : true,
+     Address space adequate? : true, nofile limit adequate? : false, nproc limit adequate? : false
+```
 
 Perform the following procedures to ensure that each Cassandra machine
 meets the basic tuning
 requirements.
 
-|  |            |                                                                                                                               |
-|  | ---------- | ----------------------------------------------------------------------------------------------------------------------------- |
-|  | **Note  ** | The following commands apply for Red Hat 7.x. If you are using another Linux distribution, consult your system administrator. |
+{{% alert title="Note" %}}
+The following commands apply for Red Hat 7.x. If you are using another Linux distribution, consult your system administrator.
+{{% /alert %}}
 
 #### Install jemalloc
 
@@ -67,28 +70,27 @@ Ensure that `jemalloc` is installed.
 1.  Run the command `rpm -q jemalloc` to check if jemalloc is installed.
 2.  If jemalloc is not installed, run the following command to install
     it from `epel`:
-
-<table>
-<tbody>
-<tr class="odd">
-<td><pre data-space="preserve"><code>sudo rpm -iv https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-sudo yum install -y jemalloc</code></pre></td>
-</tr>
-</tbody>
-</table>
+```
+sudo rpm -iv https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+sudo yum install -y jemalloc
+```
 
 #### Turn swap off
 
 Ensure that you turn `swap`
 off.
 
-|  |            |                                                                                                                                                                                                                                      |
-|  | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-|  | **Note  ** | Apache Cassandra recommends that `swap` is disabled. If your company policies or production environment requires `swap` to be `on` for other processes, you must ensure that the Cassandra process is not `swapped out` at any time. |
+{{% alert title="Note" %}}
+Apache Cassandra recommends that `swap` is disabled. If your company policies or production environment requires `swap` to be `on` for other processes, you must ensure that the Cassandra process is not `swapped out` at any time.
+{{% /alert %}}
+
 
 1.  The line `cat/proc/swaps` in the `/etc/fstab` file should show `NO
     entries`. If entries are present, execute the following command to
     disable all swap entries currently active:
+    ```
+    sudo swapoff -a sad
+    ```
 2.  Delete all swap entries in `/etc/fstab` to ensure that swap is not
     enabled again when the machine is restarted.
 
@@ -100,30 +102,22 @@ If running with a console or `init.d`, create a
 `/etc/security/limits.d/cassandra.conf` file, and add the following
 lines to it (replace `cassandra_user` with the relevant user account).
 
-<table>
-<tbody>
-<tr class="odd">
-<td><pre data-space="preserve"><code>&lt;cassandra_user&gt; - memlock unlimited
-&lt;cassandra_user&gt; - nofile 100000
-&lt;cassandra_user&gt; - nproc 32768
-&lt;cassandra_user&gt; - as unlimited</code></pre></td>
-</tr>
-</tbody>
-</table>
+```
+<cassandra_user> - memlock unlimited
+<cassandra_user> - nofile 100000
+<cassandra_user> - nproc 32768
+<cassandra_user> - as unlimited
+```
 
 If running via a system service, ensure that the following lines are
 present in the `[SERVICE]` section of the Cassandra service file:
 
-<table>
-<tbody>
-<tr class="odd">
-<td><pre data-space="preserve"><code>LimitMEMLOCK=infinity
+```
+LimitMEMLOCK=infinity
 LimitNOFILE=100000
 LimitNPROC=32768
-LimitAS=infinityd</code></pre></td>
-</tr>
-</tbody>
-</table>
+LimitAS=infinityd
+```
 
 ### <span id="Clean"></span>Clean up Cassandra repair history
 
@@ -133,39 +127,27 @@ increase in size over time. The extent of the issue can be seen by
 running the following command to see how much space is being consumed by
 `system_distributed`:
 
-<table>
-<tbody>
-<tr class="odd">
-<td><pre><code>du -md 1 &lt;cassandra_root&gt;/data/data/ | sort -n</code></pre></td>
-</tr>
-</tbody>
-</table>
+```
+du -md 1 <cassandra_root>/data/data/ | sort -n
+```
 
 To prevent this, it is recommended that you set a 7 day TTL on the
 repair history tables and remove any existing data. First, execute the
 following using `cqlsh` on one of the Cassandra nodes:
 
-<table>
-<tbody>
-<tr class="odd">
-<td><pre data-space="preserve"><code>ALTER TABLE system_distributed.repair_history WITH default_time_to_live = 604800;
+```cql
+ALTER TABLE system_distributed.repair_history WITH default_time_to_live = 604800;
 TRUNCATE system_distributed.repair_history;
 ALTER TABLE system_distributed.parent_repair_history WITH default_time_to_live = 604800;
-TRUNCATE system_distributed.parent_repair_history;</code></pre></td>
-</tr>
-</tbody>
-</table>
+TRUNCATE system_distributed.parent_repair_history;
+```
 
 To reclaim the disk space, clean up the snapshots generated by the
 truncate by executing the following against all Cassandra nodes:
 
-<table>
-<tbody>
-<tr class="odd">
-<td><pre><code>nodetool clearsnapshot system_distributed</code></pre></td>
-</tr>
-</tbody>
-</table>
+```
+nodetool clearsnapshot system_distributed
+```
 
 ## Record thread dumps in Cassandra logs
 
@@ -173,21 +155,16 @@ To record thread dumps in Cassandra logs, add the following commands to
 the end of `$CASSANDRA_HOME/conf/cassandra-env.sh`
 file.
 
-|  |            |                                                               |
-|  | ---------- | ------------------------------------------------------------- |
-|  | **Note  ** | The `cassandra-env.sh` file must have executable permissions. |
+{{% alert title="Note" %}}
+The `cassandra-env.sh` file must have executable permissions.
+{{% /alert %}}
 
-<table>
-<tbody>
-<tr class="odd">
-<td><pre><code>JVM_OPTS=&quot;$JVM_OPTS -XX:+UnlockDiagnosticVMOptions&quot; 
-JVM_OPTS=&quot;$JVM_OPTS -XX:+LogVMOutput&quot;
-JVM_OPTS=&quot;$JVM_OPTS -XX:LogFile=${CASSANDRA_HOME}/logs/system.log&quot;</code></pre></td>
-</tr>
-</tbody>
-</table>
+```
+JVM_OPTS="$JVM_OPTS -XX:+UnlockDiagnosticVMOptions"
+JVM_OPTS="$JVM_OPTS -XX:+LogVMOutput"
+JVM_OPTS="$JVM_OPTS -XX:LogFile=${CASSANDRA_HOME}/logs/system.log"
+```
 
 ### Further information
 
-See also [Perform essential Apache Cassandra
-operations](cassandra_ops.htm).
+See also [Perform essential Apache Cassandra operations](cassandra_ops).

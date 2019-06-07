@@ -1,7 +1,12 @@
-# Perform essential Apache Cassandra operations
-
-This topic describes the minimum essential operations that are required
-to maintain a healthy Apache Cassandra high availability (HA) cluster.
+---
+title: "Perform essential Apache Cassandra operations"
+linkTitle: "Perform essential operations"
+weight: 6
+date: 2019-06-05
+description: >
+  Perform the minimum essential operations that are required
+  to maintain a healthy Apache Cassandra high availability (HA) cluster
+---
 
 ## <span id="Perform"></span>Repair inconsistent nodes
 
@@ -14,9 +19,9 @@ For standard HA configurations, it is best to run repair once per week
 (during a quiet period) on each node in the
 cluster.
 
-|  |               |                                                                                                                                                      |
-|  | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  | **Caution  ** | The repair must only be executed on one node at a time. You must therefore adjust the repair schedule for each node in the cluster to avoid overlap. |
+{{% alert title="Caution" color="warning" %}}
+The repair must only be executed on one node at a time. You must therefore adjust the repair schedule for each node in the cluster to avoid overlap.
+{{% /alert %}}
 
 ### Schedule repair using crontab
 
@@ -31,40 +36,33 @@ examples:
 
 **Node 1**:
 
-Run full repair at 1 a.m. every
-Saturday:
+Run full repair at 1 a.m. every Saturday:
 
-|                                                                                                                                                |
-| ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 1 \* \* 6 PATH\_TO\_CASSANDRA/bin/nodetool CONNECTION\_SECURITY\_PARAMS repair -pr --full \> PATH\_TO\_CASSANDRA/logs/last\_repair.log 2\>&1 |
+```
+0 1 * * 6 PATH_TO_CASSANDRA/bin/nodetool CONNECTION_SECURITY_PARAMS repair -pr --full > PATH_TO_CASSANDRA/logs/last_repair.log 2>&1
+```
 
 **Node 2**:
 
-Run full repair at 1 a.m. every
-Sunday:
-
-|                                                                                                                                                |
-| ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 1 \* \* 0 PATH\_TO\_CASSANDRA/bin/nodetool CONNECTION\_SECURITY\_PARAMS repair -pr --full \> PATH\_TO\_CASSANDRA/logs/last\_repair.log 2\>&1 |
+Run full repair at 1 a.m. every Sunday:
+```
+0 1 * * 0 PATH_TO_CASSANDRA/bin/nodetool CONNECTION_SECURITY_PARAMS repair -pr --full > PATH_TO_CASSANDRA/logs/last_repair.log 2>&1
+```
 
 **Node 3**:
 
-Run full repair at 1 a.m. every
-Monday:
+Run full repair at 1 a.m. every Monday:
+```
+0 1 * * 1 PATH_TO_CASSANDRA/bin/nodetool CONNECTION_SECURITY_PARAMS repair -pr --full > PATH_TO_CASSANDRA/logs/last_repair.log 2>&1
+```
 
-|                                                                                                                                                |
-| ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 1 \* \* 1 PATH\_TO\_CASSANDRA/bin/nodetool CONNECTION\_SECURITY\_PARAMS repair -pr --full \> PATH\_TO\_CASSANDRA/logs/last\_repair.log 2\>&1 |
 
-See also [Clean up Cassandra repair
-history](cassandra_BestPractices.htm#Clean).
+See also [Clean up Cassandra repair history](cassandra_BestPractices#Clean).
 
 ## <span id="Replace"></span>Replace dead nodes
 
 If a node is down for more than 10 days, it should be replaced. For
-details on replacing dead Cassandra nodes, see the [Replacing a dead
-node or dead seed
-node](https://docs.datastax.com/en/archived/cassandra/2.2/cassandra/operations/opsReplaceNode.html)
+details on replacing dead Cassandra nodes, see the [Replacing a dead node or dead seed node](https://docs.datastax.com/en/archived/cassandra/2.2/cassandra/operations/opsReplaceNode.html)
 documentation.
 
 ## Reconfigure an existing Apache Cassandra installation from scratch
@@ -74,54 +72,43 @@ move the Cassandra data files and restore the `cassandra.yaml`
 configuration file if necessary (if you updated Cassandra
 configuration). Perform the following steps:
 
-1.  Stop Cassandra. For details, see [Manage Apache
-    Cassandra](cassandra_manage.htm).
+1.  Stop Cassandra. For details, see [Manage Apache Cassandra](cassandra_manage).
 2.  Move `CASSANDRA_HOME/data` to `CASSANDRA_HOME/data/OLD-DATA-DATE`.
 3.  Restore `cassandra.yaml` in `CASSANDRA_HOME/conf` if necessary.
 
 ## Enable Apache Cassandra debug logging
 
-You can enable Cassandra debug logging using any of the following
-approaches:
+You can enable Cassandra debug logging using any of the following approaches:
 
   - **logback.xml**
-  - You can specify a `logger` in the `cassandra/conf/logback.xml`
+    You can specify a `logger` in the `cassandra/conf/logback.xml`
     configuration file as follows:
-
-|                                                               |
-| ------------------------------------------------------------- |
-| \<logger name "org.apache.cassandra.transport" level=DEBUG/\> |
-
+    ```
+    <logger name "org.apache.cassandra.transport" level=DEBUG/>
+    ```
   - **nodetool**
-  - You can use the `nodetool setlogginglevel` command as follows:
-
-|                                                               |
-| ------------------------------------------------------------- |
-| nodetool setlogginglevel org.apache.cassandra.transport DEBUG |
-
+    You can use the `nodetool setlogginglevel` command as follows:
+    ```
+    nodetool setlogginglevel org.apache.cassandra.transport DEBUG
+    ```
   - **JConsole**
-  - The JConsole tool enables you to configure Cassandra logging using
+    The JConsole tool enables you to configure Cassandra logging using
     JMX. For example, you can invoke `setLoggingLevel` and specify
     `org.apache.cassandra.db.StorageServiceMBean` and `DEBUG` as
     parameters. For more details, see the next section.
 
 For more details on enabling logging, see the following, which also
-applies to Cassandra
-    2.2:
+applies to Cassandra 2.2:
 
-  - [https://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configLoggingLevels\_r.html](https://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configLoggingLevels_r.html "https://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configLoggingLevels_r.html")
-  - [http://thelastpickle.com/blog/2016/02/10/locking-down-apache-cassandra-logging.html](http://thelastpickle.com/blog/2016/02/10/locking-down-apache-cassandra-logging.html "http://thelastpickle.com/blog/2016/02/10/locking-down-apache-cassandra-logging.html")
+  - [https://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configLoggingLevels\_r.html](https://docs.datastax.com/en/cassandra/2.1/cassandra/configuration/configLoggingLevels_r.html)
+  - [http://thelastpickle.com/blog/2016/02/10/locking-down-apache-cassandra-logging.html](http://thelastpickle.com/blog/2016/02/10/locking-down-apache-cassandra-logging.html)
 
 ## <span id="Monitor"></span>Monitor a Cassandra cluster using JMX
 
 You can use Java Management Extensions to monitor and manage performance
-in a Cassandra cluster. For details, see the [Monitoring a Cassandra
-cluster](https://docs.datastax.com/en/archived/cassandra/2.2/cassandra/operations/opsMonitoring.html)
+in a Cassandra cluster. For details, see the [Monitoring a Cassandra cluster](https://docs.datastax.com/en/archived/cassandra/2.2/cassandra/operations/opsMonitoring.html)
 documentation.
 
 ## Upgrade your Cassandra version
 
-For details on upgrading your Cassandra version, see [Upgrade Apache
-Cassandra](/csh?context=801&product=prod-api-gateway-77) in the [API
-Gateway Upgrade
-Guide](/bundle/APIGateway_77_UpgradeGuide_allOS_en_HTML5).
+For details on upgrading your Cassandra version, see [Upgrade Apache Cassandra](/csh?context=801&product=prod-api-gateway-77) in the [API Gateway Upgrade Guide](/bundle/APIGateway_77_UpgradeGuide_allOS_en_HTML5).

@@ -1,6 +1,7 @@
 ---
 title: "Apache Cassandra backup and restore"
 linkTitle: "Backup and restore"
+weight: 5
 date: 2019-06-05
 description: >
   Learn how to back up and restore Cassandra.

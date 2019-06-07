@@ -1,6 +1,7 @@
 ---
 title: "Manage Apache Cassandra"
 linkTitle: "Manage Apache Cassandra"
+weight: 4
 date: 2019-06-05
 description: >
   Start or stop Cassandra manually or as a service.

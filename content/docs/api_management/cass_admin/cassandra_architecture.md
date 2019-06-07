@@ -1,6 +1,7 @@
 ---
 title: "Cassandra deployment architectures"
 linkTitle: "Cassandra deployment architectures"
+weight: 1
 date: 2019-06-05
 description: >
   This topic describes the Cassandra deployment architectures supported by API Gateway.
@@ -133,11 +134,11 @@ Cassandra HA configuration in the diagrams consists of the following:
     `ipB`, and `ipC`.
   - Replication factor of `3`. Each node holds 100% of the data.
   - Default values in `cassandra.yaml` for:
-      - Server-server communication:  
-        `listen_address` set to IP address  
-        `storage_port` set to `7000`  
-        `ssl_storage_port`: `7001` (when TLS v1.2 is configured)  
-      - Client-server communication:  
+      - Server-server communication:
+        `listen_address` set to IP address
+        `storage_port` set to `7000`
+        `ssl_storage_port`: `7001` (when TLS v1.2 is configured)
+      - Client-server communication:
         `native_transport_port` of `9042`
       - JMX monitoring on `localhost:7199`
 
@@ -153,13 +154,13 @@ Cassandra HA configuration in the diagrams consists of the following:
 
 ### API Gateway configuration
 
-API Gateway acts as a client of the Cassandra cluster as follows:  
+API Gateway acts as a client of the Cassandra cluster as follows:
 
-  - Client failover:  
+  - Client failover:
     API Gateway can fail over to any of the Cassandra nodes for service.
     Each API Gateway is configured with the connection details of each
     Cassandra host.
-  - Strong consistency:  
+  - Strong consistency:
     Cassandra read and write consistency levels are both set to
     `QUORUM`. This, along with the replication factor of `3`, enables
     full availability in the event of one node
