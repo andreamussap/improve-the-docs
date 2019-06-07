@@ -27,11 +27,7 @@ Windows is supported only for a limited set of developer tools. API Gateway and 
 on Windows that you have configured with your API Gateway installation.
 {{< /alert>}}
 
-For details on hosting Cassandra in datacenters, see [Configure API
-Management in multiple
-datacenters](/csh?context=303&product=prod-api-gateway-77) in the [API
-Gateway Installation
-Guide](/bundle/APIGateway_77_InstallationGuide_allOS_en_HTML5/).
+For details on hosting Cassandra in datacenters, see [Configure API Management in multiple datacenters](/csh?context=303&product=prod-api-gateway-77) in the [API Gateway Installation Guide](/bundle/APIGateway_77_InstallationGuide_allOS_en_HTML5/).
 
 ## Cassandra in standalone mode
 
@@ -59,24 +55,18 @@ The next steps depend on your installation setup type:
     running on `localhost`.
   - In a Custom setup without the QuickStart tutorial, you must
     configure the connection in Policy Studio. For more details, see
-    [Connect to API Gateway for the first
-    time](cassandra_manage.htm#Connect).
+    [Connect to API Gateway for the first time](/docs/api_management/cass_admin/cassandra_manage#connect-to-api-gateway-for-the-first-time).
 
-To use Cassandra with API Manager, see [Configure a highly available
-Cassandra cluster](/docs/api_management/cass_admin/cassandra_manage#Update2). This is configured by
+To use Cassandra with API Manager, see [Configure a highly available Cassandra cluster](/docs/api_management/cass_admin/cassandra_config). This is configured by
 default when API Manager is installed along with the QuickStart
 tutorial.
 
-To use Cassandra with OAuth, see [Deploy OAuth
-configuration](/csh?context=400&product=prod-api-gateway-77) in the [API
-Gateway OAuth User
-Guide](/bundle/APIGateway_77_OAuthUserGuide_allOS_en_HTML5/).
+To use Cassandra with OAuth, see [Deploy OAuth configuration](/csh?context=400&product=prod-api-gateway-77) in the [API Gateway OAuth User Guide](/bundle/APIGateway_77_OAuthUserGuide_allOS_en_HTML5/).
 
 The following diagram shows Cassandra in standalone mode with a default
 Standard setup:
 
-![Cassandra standalone architecture
-](/Images/docbook/images/install/cassandra_architecture_standalone.png)
+![Cassandra standalone architecture](/Images/docbook/images/install/cassandra_architecture_standalone.png)
 
 ## <span id="Configur4"></span>Cassandra in High Availability mode
 
@@ -93,8 +83,7 @@ minimum cost of ownership.
 
 The following diagram shows local Cassandra HA mode:
 
-![Local Cassandra HA architecture
-](/Images/docbook/images/install/cassandra_architecture_local.png)
+![Local Cassandra HA architecture](/Images/docbook/images/install/cassandra_architecture_local.png)
 
 {{< alert title="Note" >}}In this example, one of the Cassandra nodes runs without an API Gateway instance on the same host. This is because the minimum deployment architecture includes two API Gateway hosts and three Cassandra hosts. If you have three API Gateway instances, all Cassandra nodes are local..{{< /alert >}}
 
@@ -108,12 +97,11 @@ Cassandra are:
     Gateway. However, the data can be stored outside the DMZ, and there
     might be improved performance.
   - You might need to open ports in the firewall to connect to Cassandra
-    outside the DMZ. For more details, see [Configure a highly available Cassandra cluster](cassandra_config#Network).
+    outside the DMZ. For more details, see [Configure a highly available Cassandra cluster](../cassandra_config).
   - You do not have to use the Cassandra component supplied by the API
     Gateway installer.
   - You can configure the remote node using the `setup-cassandra` script
-    supplied by the API Gateway installation. For more details, see
-    [setup-cassandra script reference](cassandra_setup_script).
+    supplied by the API Gateway installation. For more details, see [setup-cassandra script reference](../cassandra_setup_script).
     Alternatively, you can perform all necessary Cassandra configuration
     changes manually.
   - You must update the API Gateway Cassandra client settings in Policy
@@ -121,8 +109,7 @@ Cassandra are:
 
 The following diagram shows remote Cassandra HA mode:
 
-![Remote Cassandra HA architecture
-](/Images/docbook/images/install/cassandra_architecture_remote.png)
+![Remote Cassandra HA architecture](/Images/docbook/images/install/cassandra_architecture_remote.png)
 
 ### Cassandra HA configuration
 
@@ -170,4 +157,4 @@ loss.
 You can have any number of API Gateway instances (all running either locally or remote to Cassandra). However, you must have at least two API Gateway instances for HA. This also applies to API Manager.
 {{< /alert >}}
 
-For more details on Cassandra HA configuration, see [Configure a highly available Cassandra cluster](cassandra_config).
+For more details on Cassandra HA configuration, see [Configure a highly available Cassandra cluster](../cassandra_config).

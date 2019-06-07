@@ -167,4 +167,4 @@ JVM_OPTS="$JVM_OPTS -XX:LogFile=${CASSANDRA_HOME}/logs/system.log"
 
 ### Further information
 
-See also [Perform essential Apache Cassandra operations](cassandra_ops).
+See also [Perform essential Apache Cassandra operations](../cassandra_ops).

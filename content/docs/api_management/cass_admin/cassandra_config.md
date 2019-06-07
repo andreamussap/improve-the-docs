@@ -37,7 +37,7 @@ cluster:
   - Decide on the number of API Gateway nodes, and install and configure
     them (local or remote to Cassandra).
 {{% alert title="Note" %}}
-It is recommended that you configure a Cassandra HA cluster with three Cassandra nodes, and at least two API Gateway instances (local or remote). For details, see [Cassandra deployment architectures](cassandra_architecture).
+It is recommended that you configure a Cassandra HA cluster with three Cassandra nodes, and at least two API Gateway instances (local or remote). For details, see [Cassandra deployment architectures](../cassandra_architecture).
 {{% /alert %}}
   - Create a HA API Gateway environment.
   - Configure the Cassandra client settings in Policy Studio for the API
@@ -59,7 +59,7 @@ Perform the following steps to configure a *seed* node:
 2.  Update the `CASSANDRA_HOME/conf/cassandra.yaml` file manually or
     using the `setup-cassandra` script.
     Manually:
-    ```
+    {{< highlight yaml "linenos=table, hl_lines=1 5 6, linenostart=9" >}}
     seed_provider, parameters, seeds: IP_SEED_NODE
     start_native_transport: true
     start_rpc: false
@@ -68,7 +68,7 @@ Perform the following steps to configure a *seed* node:
     rpc_address: IP_SEED_NODE
     authenticator: org.apache.cassandra.auth.PasswordAuthenticator
     authorizer: org.apache.cassandra.auth.CassandraAuthorizer
-    ```
+    {{< / highlight >}}
     Using the `setup-cassandra` script:
     ```
     setup-cassandra --seed --own-ip=<IP_SEED_NODE> --nodes=3 --cassandra-config=CONFIG_FILE
@@ -152,15 +152,15 @@ You need at least two API Gateways in a group for HA.
 
 This section describes the following options:
 
-  - [Configure API Gateway Cassandra client settings](#APIGWClient)
-  - [Configure API Manager Cassandra client settings](#APIMngrClient)
+  - [Configure API Gateway Cassandra client settings](#configure-api-gateway-cassandra-client-settings)
+  - [Configure API Manager Cassandra client settings](#configure-api-manager-cassandra-client-settings)
 
-### <span id="APIGWClient"></span>Configure API Gateway Cassandra client settings
+### Configure API Gateway Cassandra client settings
 
 To update the Cassandra client configuration for API Gateway, perform
 the following steps:
 
-#### <span id="Configur5"></span>Configure the API Gateway domain
+#### Configure the API Gateway domain
 
 1.  Ensure API Gateway has been installed on the API Gateway 1 and API
     Gateway 2 nodes. For details, see the [API Gateway Installation Guide](/bundle/APIGateway_77_InstallationGuide_allOS_en_HTML5/).
@@ -168,7 +168,7 @@ the following steps:
     node using `managedomain`. For more details, see [Configure an API Gateway domain](/csh?context=102&product=prod-api-gateway-77) in the
     [API Gateway Administrator Guide](/bundle/APIGateway_77_AdministratorGuide_allOS_en_HTML5/).
 
-#### <span id="Configur6"></span>Configure the API Gateway Cassandra client connection
+#### Configure the API Gateway Cassandra client connection
 
 1.  In Policy Studio, open your API Gateway group configuration.
 2.  Select **Server Settings \> Cassandra \> Authentication**, and enter
@@ -177,10 +177,10 @@ the following steps:
     for each Cassandra node in the cluster (`ipA`, `ipB` and `ipC` in this example).
 
 {{% alert title="Tip" %}}
-You can automate these steps by running the `updateCassandraSettings.py` script against a deployment package (`.fed`). For more details, see [Configure a highly available Cassandra cluster](#Automate).
+You can automate these steps by running the `updateCassandraSettings.py` script against a deployment package (`.fed`). For more details, see [Configure a highly available Cassandra cluster](../cassandra_config).
 {{% /alert %}}
 
-#### <span id="Configur7"></span>Configure the API Gateway Cassandra consistency levels
+#### Configure the API Gateway Cassandra consistency levels
 
 1.  Ensure that the **API Server** KPS collection has been created under
     **Environment Configuration \> Key Property Stores**. This is
@@ -192,7 +192,7 @@ You can automate these steps by running the `updateCassandraSettings.py` script 
     the required KPS collections. For more details, see:
 
       - [Deploy OAuth configuration](/csh?context=400&product=prod-api-gateway-77) in the [API Gateway OAuth User Guide](/bundle/APIGateway_77_OAuthUserGuide_allOS_en_HTML5/)
-      - [Configure API Manager Cassandra client settings](#APIMngrClient)
+      - [Configure API Manager Cassandra client settings](#configure-api-manager-cassandra-client-settings)
 
 3.  Select **Environment Configuration \> Key Property Stores \> API
     Server \> Data Sources \> Cassandra Storage**, and click **Edit**.
@@ -224,9 +224,9 @@ By default, OAuth uses EhCache instead of Cassandra. For more details on OAuth, 
     API Gateway group.
 2.  Restart each API Gateway in the group.
 
-For details on any connection errors between API Gateway and Cassandra, see [Configure a highly available Cassandra cluster](#top).
+For details on any connection errors between API Gateway and Cassandra, see [Configure a highly available Cassandra cluster](../cassandra_config).
 
-### <span id="APIMngrClient"></span>Configure API Manager Cassandra client settings
+### Configure API Manager Cassandra client settings
 
 To update the Cassandra client configuration for API Manager, perform
 the following steps:
@@ -242,10 +242,10 @@ the following steps:
 startinstance -n "my_gw_server_1" -g "my_group"
 ```
 2.  Configure the Cassandra connection on the API Gateway 1 node. For
-    details, see [Configure the API Gateway Cassandra client connection](#Configur6).
+    details, see [Configure the API Gateway Cassandra client connection](#configure-the-api-gateway-cassandra-client-connection).
 
 1.  Configure the Cassandra consistency levels for your KPS Collections.
-    For details, see [Configure the API Gateway Cassandra consistency levels](#Configur7).
+    For details, see [Configure the API Gateway Cassandra consistency levels](#configure-the-api-gateway-cassandra-consistency-levels).
 2.  In the Policy Studio tree, select **Server Settings** \> **API
     Manager** \> **Quota Settings**, and ensure that **Use Cassandra**
     is selected.
