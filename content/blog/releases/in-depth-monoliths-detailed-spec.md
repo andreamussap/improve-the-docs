@@ -189,11 +189,13 @@ Inline code inside table cells should still be distinguishable.
 
 Small images should be shown at their actual size.
 
-![](http://placekitten.com/g/300/200/)
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Picea_abies_shoot_with_buds%2C_Sogndal%2C_Norway.jpg/240px-Picea_abies_shoot_with_buds%2C_Sogndal%2C_Norway.jpg)
 
 Large images should always scale down and fit in the content container.
 
-![](http://placekitten.com/g/1200/800/)
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Picea_abies_shoot_with_buds%2C_Sogndal%2C_Norway.jpg/1024px-Picea_abies_shoot_with_buds%2C_Sogndal%2C_Norway.jpg)
+
+_The photo above of the Spruce Picea abies shoot with foliage buds: Bjørn Erik Pedersen, CC-BY-SA._
 
 ## Components
 
