@@ -1,8 +1,10 @@
---- title: "[]{#top}Configure connecting to multiple API Managers"
+--- 
+title: "[]{#top}Configure connecting to multiple API Managers"
 linkTitle: "[]{#top}Configure connecting to multiple API Managers" date:
 2019-7-3 description: &gt; This topic describes how to configure
 connecting API Portal to multiple API Managers and the prerequisites for
-it. --- ﻿
+it. 
+--- ﻿
 
 This topic describes how to configure connecting API Portal to multiple
 API Managers and the prerequisites for it.

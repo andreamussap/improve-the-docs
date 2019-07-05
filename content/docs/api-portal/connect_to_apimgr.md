@@ -1,7 +1,9 @@
---- title: "Connect API Portal to API Manager" linkTitle: "Connect
+--- 
+title: "Connect API Portal to API Manager" linkTitle: "Connect
 API Portal to API Manager" date: 2019-7-3 description: &gt; API Portal
 is a layered product linked to API Manager. API Portal leverages the
-user registry and API Catalog stored and managed in API Manager. --- ﻿
+user registry and API Catalog stored and managed in API Manager. 
+--- ﻿
 
 API Portal is a layered product linked to API Manager. API Portal
 leverages the user registry and API Catalog stored and managed in API

@@ -1,7 +1,9 @@
---- title: "About this guide" linkTitle: "About this guide" date:
+--- 
+title: "About this guide" linkTitle: "About this guide" date:
 2019-7-3 description: &gt; This guide describes how to install
 API Portal components on all supported platforms, or how to upgrade an
-existing installation. --- ﻿
+existing installation. 
+--- ﻿
 
 This guide describes how to install API Portal components on all
 supported platforms, or how to upgrade an existing installation.
