@@ -6,8 +6,9 @@ linkTitle: "View API details"
 
 date: 2019-7-5
 
-description: &gt; To view the details of an API or to test the API,
-click on the API you want or the **Test** button.
+description: > 
+    To view the details of an API or to test the API,
+    click on the API you want or the **Test** button.
 
 ---
 

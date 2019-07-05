@@ -6,7 +6,8 @@ linkTitle: "Manage an API proxy using AMPLIFY CLI"
 
 date: 2019-7-5
 
-description: &gt; *Estimated reading time: 5 minutes*
+description: > 
+  *Estimated reading time: 5 minutes*
 
 ---
 

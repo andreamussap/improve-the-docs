@@ -6,11 +6,12 @@ linkTitle: "AMPLIFY Central for mesh governance (BETA)"
 
 date: 2019-7-5
 
-description: &gt; A hybrid integration approach simplifies the use of
-diverse technologies and enables different types of integration across
-your enterprise. Learn how to take advantage of the mesh governance
-capability of AMPLIFY Central to centrally manage APIs and microservices
-across multiple cloud and on-premise environments.
+description: > 
+    A hybrid integration approach simplifies the use of
+    diverse technologies and enables different types of integration across
+    your enterprise. Learn how to take advantage of the mesh governance
+    capability of AMPLIFY Central to centrally manage APIs and microservices
+    across multiple cloud and on-premise environments.
 
 ---
 

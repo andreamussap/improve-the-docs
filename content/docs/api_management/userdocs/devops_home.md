@@ -6,9 +6,10 @@ linkTitle: "AMPLIFY Central for DevOps"
 
 date: 2019-7-5
 
-description: &gt; It's easy to integrate AMPLIFY Central in your
-existing DevOps infrastructure using the AMPLIFY CLI or AMPLIFY Central
-DevOps API.
+description: > 
+    It's easy to integrate AMPLIFY Central in your
+    existing DevOps infrastructure using the AMPLIFY CLI or AMPLIFY Central
+    DevOps API.
 
 ---
 

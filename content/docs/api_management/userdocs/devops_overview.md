@@ -6,7 +6,8 @@ linkTitle: "AMPLIFY Central DevOps overview"
 
 date: 2019-7-5
 
-description: &gt; *Estimated reading time: 3 minutes*
+description: > 
+        *Estimated reading time: 3 minutes*
 
 ---
 

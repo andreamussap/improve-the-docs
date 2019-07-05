@@ -1,7 +1,4 @@
 ---
----
-
----
 
 title: "Launch API Gateway Analytics"
 
@@ -9,10 +6,11 @@ linkTitle: "Launch API Gateway Analytics"
 
 date: 2019-7-5
 
-description: &gt; This topic explains how to launch the API Gateway
-Analytics web console used to monitor your API Gateway domain. It also
-explains how to change the default API Gateway Analytics user
-credentials and sample certificate for TLS.
+description: > 
+  This topic explains how to launch the API Gateway
+  Analytics web console used to monitor your API Gateway domain. It also
+  explains how to change the default API Gateway Analytics user
+  credentials and sample certificate for TLS.
 
 ---
 

@@ -1,7 +1,4 @@
 ---
----
-
----
 
 title: "Configure API Gateway Analytics"
 
@@ -9,12 +6,13 @@ linkTitle: "Configure API Gateway Analytics"
 
 date: 2019-7-5
 
-description: &gt; This topic describes how to update an API Gateway
-Analytics configuration (for example, the API Gateway Analytics port,
-database connection, and user credentials) before starting API Gateway
-Analytics. You can use the `configureserver` script (recommended) to
-guide you through all the required steps, or you can use Policy Studio
-to configure the API Gateway Analytics configuration file.
+description: > 
+  This topic describes how to update an API Gateway
+  Analytics configuration (for example, the API Gateway Analytics port,
+  database connection, and user credentials) before starting API Gateway
+  Analytics. You can use the `configureserver` script (recommended) to
+  guide you through all the required steps, or you can use Policy Studio
+  to configure the API Gateway Analytics configuration file.
 
 ---
 

@@ -6,8 +6,9 @@ linkTitle: "Additional features"
 
 date: 2019-7-5
 
-description: &gt; The API provider can use the following API Portal
-pages to provide you additional support and other information:
+description: > 
+    The API provider can use the following API Portal
+    pages to provide you additional support and other information.
 
 ---
 
@@ -16,11 +17,11 @@ pages to provide you additional support and other information:
 The API provider can use the following API Portal pages to provide you
 additional support and other information:
 
--   [Help Center](#Help)
--   [Discussion forums](#Discussi)
--   [Documentation](#Document)
--   [Pricing](#Pricing)
--   [Blog](#Blog)
+- [[]{#Help}Help Center](#HelpHelp-Center)
+- [[]{#Discussi}Discussion forums](#DiscussiDiscussion-forums)
+- [[]{#Document}Documentation](#DocumentDocumentation)
+- [[]{#Pricing}Pricing](#PricingPricing)
+- [[]{#Blog}Blog](#BlogBlog)
 
 The available options and content may vary depending on your API
 provider.

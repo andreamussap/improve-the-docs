@@ -6,9 +6,10 @@ linkTitle: "API Catalog "
 
 date: 2019-7-5
 
-description: &gt; API Catalog in API Portal contains the APIs that are
-registered in API Manager and are available for use. You can browse APIs
-and their documentation, and test APIs.
+description: > 
+  API Catalog in API Portal contains the APIs    that are
+  registered in API Manager and are available for use. You can browse APIs
+  and their documentation, and test APIs.
 
 ---
 

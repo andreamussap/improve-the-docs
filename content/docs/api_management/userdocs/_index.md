@@ -6,8 +6,9 @@ linkTitle: "Welcome to AMPLIFY Central"
 
 date: 2019-7-5
 
-description: &gt; To be displayed as tiles, add something interactive
-like an animated gif?
+description: > 
+    To be displayed as tiles, add something interactive
+    like an animated gif?
 
 ---
 

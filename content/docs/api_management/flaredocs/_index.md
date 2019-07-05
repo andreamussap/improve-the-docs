@@ -1,7 +1,4 @@
 ---
----
-
----
 
 title: "About this guide"
 
@@ -9,11 +6,12 @@ linkTitle: "About this guide"
 
 date: 2019-7-5
 
-description: &gt; This guide describes how to set up and how to use API
-Gateway Analytics. This tool enables you to record, monitor, and report
-on the history of message traffic between API Gateway instances and
-various services, remote hosts, and clients running in an API Gateway
-domain.
+description: > 
+    This guide describes how to set up and how to use API
+    Gateway Analytics. This tool enables you to record, monitor, and report
+    on the history of message traffic between API Gateway instances and
+    various services, remote hosts, and clients running in an API Gateway
+    domain.
 
 ---
 

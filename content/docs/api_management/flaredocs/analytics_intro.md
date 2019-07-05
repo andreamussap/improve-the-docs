@@ -1,17 +1,14 @@
 ---
----
-
----
-
 title: "Introduction to API Gateway Analytics"
 
 linkTitle: "Introduction to API Gateway Analytics"
 
 date: 2019-7-5
 
-description: &gt; This guide assumes that you have already installed API
-Gateway Analytics. For more details, see the [API Gateway Installation
-Guide](/bundle/APIGateway_77_InstallationGuide_allOS_en_HTML5/) .
+description: > 
+    This guide assumes that you have already installed API
+    Gateway Analytics. For more details, see the [API Gateway Installation
+    Guide](/bundle/APIGateway_77_InstallationGuide_allOS_en_HTML5/) .
 
 ---
 

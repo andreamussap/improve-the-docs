@@ -6,8 +6,9 @@ linkTitle: "Download an API"
 
 date: 2019-7-5
 
-description: &gt; API Catalog provides downloadable content for an API
-on the API details page:
+description: > 
+  API Catalog provides downloadable content for an API
+  on the API details page.
 
 ---
 
@@ -16,8 +17,8 @@ on the API details page:
 API Catalog provides downloadable content for an API on the API details
 page:
 
--   [Download the API definition](#Download)
--   [Download the client SDK](#Download2)
+- [[]{#Download}Download the API definition](#DownloadDownload-the-API-definition)
+- [[]{#Download2}Download the client SDK](#Download2Download-the-client-SDK)
 
 []{#Download}Download the API definition
 ----------------------------------------

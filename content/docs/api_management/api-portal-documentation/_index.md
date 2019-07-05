@@ -6,9 +6,10 @@ linkTitle: "About this guide"
 
 date: 2019-7-5
 
-description: &gt; This guide describes the tasks and activities that you
-as a client application developer perform when using API Portal to
-browse and consume APIs.
+description: > 
+    This guide describes the tasks and activities that you
+    as a client application developer perform when using API Portal to
+    browse and consume APIs.
 
 ---
 

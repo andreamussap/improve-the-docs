@@ -1,7 +1,4 @@
 ---
----
-
----
 
 title: " Configure scheduled report settings in Policy Studio Scheduled
 report storage settings "
@@ -11,8 +8,9 @@ Scheduled report storage settings "
 
 date: 2019-7-5
 
-description: &gt; API Gateway Analytics is deprecated and may be removed
-in a future release.
+description: > 
+  API Gateway Analytics is deprecated and may be removed
+  in a future release.
 
 ---
 
