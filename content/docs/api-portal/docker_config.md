@@ -1,9 +1,13 @@
---- title: "Customize API Portal topology in Docker" linkTitle:
-"Customize API Portal topology in Docker" date: 2019-7-3 description:
+--- 
+title: "Customize API Portal topology in Docker" 
+linkTitle:
+"Customize API Portal topology in Docker" 
+date: 2019-7-3 description:
 &gt; This section describes how to create Docker data volumes for
 persistence, edit your `docker-compose.yml` file to customize your
 Docker-based API Portal topology to suit your environment, and deploy
-API Portal using `docker-compose up`. --- ﻿
+API Portal using `docker-compose up`. 
+--- ﻿
 
 This section describes how to create Docker data volumes for
 persistence, edit your `docker-compose.yml` file to customize your
