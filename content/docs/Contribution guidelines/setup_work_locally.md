@@ -13,6 +13,15 @@ If you are a maintainer of this documentation site, or a contributor who will be
 * You will need a Git client installed, such as Gitbash
 * You will need write access to the Git repo
 
+## Clone the Git repo
+
+Clone the git repo. Don't forget to use `--recurse-submodules` or you won't pull down some of the code you need to generate a working site.
+
+```
+git clone --recurse-submodules --depth 1 https://github.com/alexearnshaw/improve-the-docs.git
+```
+
+
 ## Install Hugo
 
 You need a [recent version](https://github.com/gohugoio/hugo/releases) of Hugo to build and run the site. If you install from the release page, make sure to get the `extended` Hugo version, which supports SCSS: you may need to scroll down the list of releases. Hugo can be installed via Brew if you're running MacOs. If you're a Linux user, do not use `sudo apt-get install hugo`, as it currently doesn't get you the `extended` version.
@@ -26,14 +35,6 @@ The theme uses `PostCSS` to generate the site resources the first time you run t
 ```
 npm install -D --save autoprefixer
 npm install -D --save postcss-cli
-```
-
-## Clone the Git repo
-
-Clone the git repo. Don't forget to use `--recurse-submodules` or you won't pull down some of the code you need to generate a working site.
-
-```
-git clone --recurse-submodules --depth 1 git@github.com:alexearnshaw/improve-the-docs.git
 ```
 
 ## Build the site locally
