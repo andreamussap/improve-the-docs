@@ -42,11 +42,11 @@ This following configuration files can be found in the site root:
 
 The Docsy theme is installed in this site's git repo as a git submodule. To update the theme with the latest commits from the [Docsy GitHub repo](https://github.com/google/docsy):
 
-1. In Git CLI, navigate to the root of the local repo and checkout a new branch. For example:
+1. In Git CLI, navigate to the root of the local repo and checkout **master**. For example:
 
     ```
     cd improve-the-docs
-    git checkout -b my_branch
+    git checkout master
     ```
 
 2. To update the submodule, run:
@@ -64,4 +64,14 @@ The Docsy theme is installed in this site's git repo as a git submodule. To upda
 
 4. Push the commit to your project repo. For example:
 
-    git push --set-upstream origin my_branch
+    ```
+    git push
+    ```
+
+5. Tell  all project maintainers to run:
+
+    ```
+    git checkout master
+    git pull
+    git submodule update --recursive
+    ```
