@@ -1,6 +1,6 @@
 
 ---
-title: "Docsy Documentation"
+title: "API Management and AMPLIFY Central documentation"
 linkTitle: "Documentation"
 weight: 20
 menu:
@@ -8,12 +8,6 @@ menu:
     weight: 20
 ---
 
-This is a landing page for a top level section.
+Welcome to the documentation for Axway API Management and Axway AMPLIFY Central.
 
-* Summarize
-* Your section
-* Here
-
-Find out how to use the Docsy theme in [Getting Started](getting-started/).
-
-
+Find out how to contribute to this documentation in [Contribution guidelines](contribution-guidelines/).
